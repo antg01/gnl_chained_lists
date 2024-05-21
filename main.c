@@ -6,7 +6,7 @@
 /*   By: angerard <angerard@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:42:16 by angerard          #+#    #+#             */
-/*   Updated: 2024/05/21 17:43:21 by angerard         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:19:48 by angerard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ int	main(void)
 	while (1)
 	{
 		line = get_next_line(fd);
-		printf("%s", line);
-		if (line == NULL)
+		if (line)
+		{
+			printf("%s", line);
+			free(line);
+		}
+		else
 			break ;
-		free(line);
 	}
+	close(fd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: angerard <angerard@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:58:25 by angerard          #+#    #+#             */
-/*   Updated: 2024/05/21 17:39:28 by angerard         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:19:03 by angerard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ char	*get_next_line(int fd)
 	static t_list	*stash;
 	char			*line;
 
-	stash = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
+	if (!stash)
+		stash = NULL;
 	line = NULL;
 	// 1) read from fd and add to linked list
 	read_stash(fd, &stash);
@@ -29,11 +30,11 @@ char	*get_next_line(int fd)
 	extract_line(stash, &line);
 	// 3) clean stash
 	clear_stash(&stash);
-	if (line[0] != '\0')
+	if (!line || line[0] == '\0')
 	{
+		free(line);
 		free_stash(stash);
 		stash = NULL;
-		free(NULL);
 		return (NULL);
 	}
 	return (line);
@@ -51,8 +52,8 @@ void	read_stash(int fd, t_list **stash)
 		buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buff)
 			return ;
-		readed = (int)read(fd, buff, BUFFER_SIZE);
-		if ((*stash == NULL && readed == 0) && readed == -1)
+		readed = read(fd, buff, BUFFER_SIZE);
+		if (readed <= 0)
 		{
 			free(buff);
 			return ;
@@ -148,7 +149,8 @@ void	clear_stash(t_list **stash)
 	{
 		i++;
 	}
-	clean_node->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i) + 1));
+	clean_node->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i)
+				+ 1));
 	if (clean_node->content == NULL)
 		return ;
 	j = 0;
