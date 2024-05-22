@@ -6,7 +6,7 @@
 /*   By: angerard <angerard@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:58:25 by angerard          #+#    #+#             */
-/*   Updated: 2024/05/21 18:19:03 by angerard         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:58:50 by angerard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ char	*get_next_line(int fd)
 	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
+	{
+		clear_static_stash(&stash);
 		return (NULL);
+	}
 	if (!stash)
 		stash = NULL;
 	line = NULL;
-	// 1) read from fd and add to linked list
 	read_stash(fd, &stash);
 	if (!stash)
 		return (NULL);
-	// 2) extract from stash to line
 	extract_line(stash, &line);
-	// 3) clean stash
 	clear_stash(&stash);
 	if (!line || line[0] == '\0')
 	{
@@ -126,8 +126,10 @@ void	extract_line(t_list *stash, char **line)
 
 /* After extracting the line that was read,
 	we dont need those characters anymore.
-This function clears the stash so only the characters that have not been returned at
-the end of	get_next_line(void) remain in our static var  */
+This function clears the stash so only the characters
+that have not been returned at the end of	get_next_line(void)
+remain in our static var  */
+
 void	clear_stash(t_list **stash)
 {
 	t_list	*last;
@@ -142,22 +144,16 @@ void	clear_stash(t_list **stash)
 	last = ft_lst_get_last(*stash);
 	i = 0;
 	while (last->content[i] && last->content[i] != '\n')
-	{
 		i++;
-	}
 	if (last->content && last->content[i] == '\n')
-	{
 		i++;
-	}
 	clean_node->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i)
 				+ 1));
 	if (clean_node->content == NULL)
 		return ;
 	j = 0;
 	while (last->content[i])
-	{
 		clean_node->content[j++] = last->content[i++];
-	}
 	clean_node->content[j] = '\0';
 	free_stash(*stash);
 	*stash = clean_node;

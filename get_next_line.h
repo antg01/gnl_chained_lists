@@ -6,14 +6,14 @@
 /*   By: angerard <angerard@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:49:54 by angerard          #+#    #+#             */
-/*   Updated: 2024/05/21 17:35:09 by angerard         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:50:17 by angerard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1000000
 # endif
 
 # include <fcntl.h>
@@ -37,5 +37,6 @@ void				generate_line(char **line, t_list *stash);
 void				clear_stash(t_list **stash);
 size_t				ft_strlen(const char *s);
 void				free_stash(t_list *stash);
+void				clear_static_stash(t_list **stash);
 
 #endif

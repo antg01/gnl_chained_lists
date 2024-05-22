@@ -6,7 +6,7 @@
 /*   By: angerard <angerard@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:30:20 by angerard          #+#    #+#             */
-/*   Updated: 2024/05/21 17:40:17 by angerard         ###   ########.fr       */
+/*   Updated: 2024/05/22 12:02:25 by angerard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	free_stash(t_list *stash)
 	}
 }
 
+/* counts number of node */
 size_t	ft_strlen(const char *s)
 {
 	int	len;
@@ -92,4 +93,14 @@ size_t	ft_strlen(const char *s)
 	while (*(s++))
 		len++;
 	return (len);
+}
+
+/* Clear the static buffer */
+void	clear_static_stash(t_list **stash)
+{
+	if (stash && *stash)
+	{
+		free_stash(*stash);
+		*stash = NULL;
+	}
 }
